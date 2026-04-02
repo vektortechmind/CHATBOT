@@ -1,0 +1,69 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Instance {
+  id             String          @id @default(uuid())
+  name           String          @default("Agente Principal")
+  // Nome do atendente no WhatsApp (instruções). Opcional; se vazio a IA usa "Atendente".
+  agentName      String?
+  status         String          @default("DISCONNECTED")
+  aiWhatsappEnabled Boolean      @default(true)
+  aiTelegramEnabled Boolean      @default(true)
+  typing         Boolean         @default(true)
+  delayMin       Int             @default(4000)
+  delayMax       Int             @default(7000)
+  systemPrompt   String?
+  telegramSystemPrompt String?
+  
+  // Configurações de Provedor (somente chat)
+  chatProvider  String?
+  groqKey       String?
+  groqAudioKey  String?  // ← Chave separada para áudio/whisper (opcional)
+  geminiKey     String?
+  openrouterKey String?
+  // ID do modelo OpenRouter; null = modelo padrao interno (Llama 3 8B free)
+  openrouterModel String?
+
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @default(now()) @updatedAt
+  
+  files          File[]
+}
+model File {
+  id         String   @id @default(uuid())
+  instanceId String
+  instance   Instance @relation(fields: [instanceId], references: [id], onDelete: Cascade)
+  filename   String
+  mimetype   String
+  data       Bytes
+  extracted  String?
+  channel    String   @default("WHATSAPP")
+  createdAt  DateTime @default(now())
+
+  @@index([instanceId])
+  @@index([channel])
+}
+
+model Session {
+  id         String   @id @default(uuid())
+  instanceId String
+  key        String
+  value      String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([instanceId, key])
+  @@index([instanceId])
+}
+
+model Settings {
+  id          String    @id @default("github_update_settings")
+  githubToken String?
+  updatedAt   DateTime  @updatedAt
+}

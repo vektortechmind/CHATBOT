@@ -1,0 +1,37 @@
+# ===========================================
+# SENSÍVEL - NUNCA COMMITAR
+# ===========================================
+.env
+*.db
+*.db-journal
+.encryption_key
+
+# Backups e updates
+backups/
+updates/
+
+# Logs
+*.log
+logs/
+
+# Dependências
+node_modules/
+*/node_modules/
+
+# Build
+dist/
+build/
+
+# Editores
+.vscode/
+.idea/
+*.sw?
+*.suo
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Configurações pessoais
+*.local
+*.env.local
