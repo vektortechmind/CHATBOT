@@ -417,7 +417,7 @@ Comportamento real:
 1. o template do evento continua sendo classificado como `image`
 2. o runtime tenta baixar a imagem via HTTP/HTTPS para montar o envio no Baileys
 3. se o download funcionar, a mensagem é enviada com `image`, `caption` e `contextInfo.externalAdReply` quando aplicável
-4. se a imagem estiver ausente, a URL for inválida ou o download falhar, o runtime envia a mesma mensagem como `text`
+4. se a imagem estiver ausente, a URL for inválida ou o download falhar, o runtime envia a mesma mensagem como `text`, preservando também o link aplicável no corpo textual quando ele existir
 5. a falha da imagem não bloqueia o envio principal do evento
 
 Em outras palavras: ausência ou erro de imagem degrada para texto, não para erro de integração.
@@ -602,4 +602,5 @@ Fluxo operacional atual:
 Contrato atual: fase operacional consolidada das stories `031` a `045`.
 
 Mudanças futuras podem ampliar a lista de eventos, o endurecimento de fallback e a observabilidade operacional sem preservar compatibilidade retroativa automática para payloads não documentados.
+
 
